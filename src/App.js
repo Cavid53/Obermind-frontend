@@ -5,6 +5,7 @@ import '../node_modules/font-awesome/css/font-awesome.min.css';
 import Navbar from './components/layout/Navbar';
 import Login from './components/account/Login';
 import Register from './components/account/Register';
+import Order from './components/order/order';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Navbar />
 
         <Routes>
+          <Route  path="/order" element={<Order/>}/>
           <Route  path="/login" element={<Login/>}/>
           <Route  path="/register" element={<Register/>}/>
         </Routes>
