@@ -4,6 +4,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
 import Navbar from './components/layout/Navbar';
 import Login from './components/account/Login';
+import Register from './components/account/Register';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
 
         <Routes>
           <Route  path="/login" element={<Login/>}/>
+          <Route  path="/register" element={<Register/>}/>
         </Routes>
       </div>
     </Router>
