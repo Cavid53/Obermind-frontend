@@ -23,7 +23,6 @@ const CreateOrder = () => {
         await axios.post("/v1/order/upsert", order,{ headers: {"Authorization" : `Bearer ${token}`} });
         navigate('/order')
     };
-
     
     const goBack = () =>{
         navigate("/order");

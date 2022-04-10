@@ -67,8 +67,15 @@ const Order = () => {
                                     </td>
                                     <td className={order.status == DRAFT ? "text-danger" : "text-success"}>{order.status == DRAFT ? "DRAFT" : "SUBMITTED"}</td>
                                     <td>
-                                        <Link className="btn btn-primary mr-2 action" to={`order/detail/${order.id}`}>Details</Link>
-                                        <Link className="btn btn-outline-primary mr-2 action" to={`/order/edit/${order.id}`}>Edit</Link>
+                                        <Link className="btn btn-primary mr-2 action" to={`/order/detail/${order.id}`}>Details</Link>
+                                        {(() => {
+                                            if (order.status == DRAFT) {
+                                                return (
+                                                    <Link className="btn btn-outline-primary mr-2 action" to={`/order/edit/${order.id}`}>Edit</Link>
+                                                )
+                                            }
+                                        })()}
+                                       
                                         <Link className="btn btn-danger" to="" onClick={() => deleteOrder(order.id)}>Delete</Link>
                                         {(() => {
                                             if (order.status == DRAFT) {
