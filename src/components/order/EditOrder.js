@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { useNavigate, useParams } from "react-router-dom";
 import moment from 'moment';
+import Swal from "sweetalert2";  
 
 const EditOrder = () => {
-
+    const token = JSON.parse(localStorage.getItem('user-info'));
     const navigate = useNavigate();
     const { id } = useParams();
     const [order, setOrder] = useState({
@@ -25,13 +26,20 @@ const EditOrder = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
-        const token = JSON.parse(localStorage.getItem('user-info'));
         await axios.post("/v1/order/upsert", order,{ headers: {"Authorization" : `Bearer ${token}`} });
-        navigate("/order");
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Succesfully',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(function () {
+            navigate("/order");
+        })
+      
     };
   
     const loadOrder = async () => {
-        const token = JSON.parse(localStorage.getItem('user-info'));
         const result = await axios.get(`/v1/order/${id}`,{ headers: {"Authorization" : `Bearer ${token}`} });
         setOrder(result.data);
     }
@@ -39,8 +47,6 @@ const EditOrder = () => {
     const goBack = () =>{
         navigate("/order");
     }
-
-
 
     return (
         <div className="container">

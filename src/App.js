@@ -10,6 +10,7 @@ import CreateOrder from './components/order/CreateOrder';
 import EditOrder from './components/order/EditOrder';
 import OrderDetail from './components/orderDetail/OrderDetail';
 import AddItem from './components/orderDetail/AddItem';
+import EditItem from './components/orderDetail/EditItem';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route  path="/order/edit/:id" element={<EditOrder/>}/>
           <Route  path="/order/detail/:id" element={<OrderDetail/>}/>
           <Route  path="/order/detail/add/:id" element={<AddItem/>}/>
+          <Route  path="/order/detail/edit/:id" element={<EditItem/>}/>
         </Routes>
       </div>
     </Router>

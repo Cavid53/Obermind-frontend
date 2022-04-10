@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";  
+  
 
 const CreateOrder = () => {
 
     const navigate = useNavigate();
+    const token = JSON.parse(localStorage.getItem('user-info'));
     const [order, setOrder] = useState({
         no: "",
         orderDate: "",
@@ -19,9 +22,17 @@ const CreateOrder = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
-        const token = JSON.parse(localStorage.getItem('user-info'));
         await axios.post("/v1/order/upsert", order,{ headers: {"Authorization" : `Bearer ${token}`} });
-        navigate('/order')
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Succesfully',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(function () {
+            navigate('/order')
+        })
+        
     };
     
     const goBack = () =>{

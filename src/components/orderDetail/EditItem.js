@@ -1,21 +1,24 @@
-import React,{ useState } from 'react';
+import React,{ useState,useEffect } from 'react';
 import axios from 'axios'
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";  
 
-const AddItem = () => {
+const EditItem = () => {
     const token = JSON.parse(localStorage.getItem('user-info'));
     const navigate = useNavigate();
     const { id } = useParams();
     const [item, setItem] = useState({
-        orderId: id,
         productName: "",
         productDescription: "",
         quantity:"",
         productPrice: "",
     });
 
-    const { productName, productDescription, quantity, productPrice, orderId } = item;
+    const { productName, productDescription, quantity, productPrice } = item;
+
+    useEffect(() => {
+        loadItem();
+    }, []);
 
     const onInputChange = e => {
        setItem({ ...item, [e.target.name]: e.target.value });
@@ -31,14 +34,24 @@ const AddItem = () => {
             showConfirmButton: false,
             timer: 1500
         }).then(function () {
-            navigate("/order/detail/" + id);
+            navigate("/order/detail/" + item.orderId);
         })
     };
+
+    const loadItem = async () => {
+        const result = await axios.get(`/v1/orderitem/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+        setItem(result.data);
+    }
+
+    const goBack = () =>{
+        navigate("/order/detail/" + item.orderId);
+    }
+
 
     return (
         <div className="container">
             <div className="w-75 mx-auto shadow p-5">
-                <h2 className="text-center mb-4">Add product</h2>
+                <h2 className="text-center mb-4">Edit item</h2>
                 <form onSubmit={e => onSubmit(e)}>
                     <div className="form-group mt-3">
                         <input
@@ -46,8 +59,8 @@ const AddItem = () => {
                             className="form-control form-control-lg"
                             placeholder="Enter product name"
                             name="productName"
-                            value={productName}
                             required
+                            value={productName}
                             onChange={e => onInputChange(e)}
                         />
                     </div>
@@ -66,11 +79,11 @@ const AddItem = () => {
                         <input
                             type="number"
                             min='0'
+                            required
                             className="form-control form-control-lg"
                             placeholder="Enter quantity"
                             name="quantity"
                             value={quantity}
-                            required
                             onChange={e => onInputChange(e)}
                         />
                     </div>
@@ -86,10 +99,11 @@ const AddItem = () => {
                             onChange={e => onInputChange(e)}
                         />
                     </div>
-                    <button className="btn btn-success btn-block mt-4">Add</button>
+                    <button className="btn btn-warning btn-block mt-4">Submit</button>
                 </form>
+                <button onClick={goBack} className="btn btn-primary btn-block mt-4">Back</button>
             </div>
         </div>
     );
 };
-export default AddItem;
+export default EditItem;

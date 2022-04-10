@@ -6,6 +6,7 @@ import "../../assets/styles/orderDetail.scss";
 
 
 const OrderDetail = () => {
+    const token = JSON.parse(localStorage.getItem('user-info'));
     const [items, setItem] = useState([]);
     const { id } = useParams();
     let [orderStatus, setOrderStatus] = useState();
@@ -18,22 +19,17 @@ const OrderDetail = () => {
 
     //get all order items
     const loadItems = async () => {
-        debugger
-        const token = JSON.parse(localStorage.getItem('user-info'));
         const result = await axios.get(`/v1/orderitem/getallbyorderid/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         setItem(result.data.reverse());
     }
 
     //delete order item
     const deleteItem = async id => {
-        const token = JSON.parse(localStorage.getItem('user-info'));
         await axios.delete(`/v1/orderitem/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         loadItems();
     }
 
     const getOrder = async () => {
-        debugger
-        const token = JSON.parse(localStorage.getItem('user-info'));
         const result = await axios.get(`/v1/order/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         setOrderStatus(result.data.status)
     }

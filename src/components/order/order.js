@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import '../../assets/styles/order.scss';
 
 const Order = () => {
+
+    const token = JSON.parse(localStorage.getItem('user-info'));
     const [orders, setOrder] = useState([]);
 
     useEffect(() => {
@@ -13,7 +15,7 @@ const Order = () => {
 
     //get orders
     const loadOrders = async () => {
-        const token = JSON.parse(localStorage.getItem('user-info'));
+        debugger
         const result = await axios.get("/v1/order/all", { headers: { "Authorization": `Bearer ${token}` } });
         setOrder(result.data);
 
@@ -23,13 +25,11 @@ const Order = () => {
 
     //delete order
     const deleteOrder = async id => {
-        const token = JSON.parse(localStorage.getItem('user-info'));
         await axios.delete(`/v1/order/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         loadOrders();
     }
 
     const submitOrder = async id => {
-        const token = JSON.parse(localStorage.getItem('user-info'));
         await axios.get(`/v1/order/submit/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         loadOrders();
     }
