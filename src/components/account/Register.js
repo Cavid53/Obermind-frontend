@@ -12,7 +12,6 @@ const Register = () => {
     const navigate = useNavigate();
 
     const onSubmit = async e => {
-        debugger
         e.preventDefault();
         let data = {email,password,fullName};
         await axios.post("/v1/account/register", data);

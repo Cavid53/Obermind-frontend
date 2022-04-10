@@ -13,18 +13,16 @@ const Order = () => {
 
     //get orders
     const loadOrders = async () => {
-        debugger
         const token = JSON.parse(localStorage.getItem('user-info'));
         const result = await axios.get("/v1/order/all",{ headers: {"Authorization" : `Bearer ${token}`} });
-        debugger
         setOrder(result.data);
         
     }
 
-
     //delete order
     const deleteOrder = async id => {
-        await axios.delete(`/v1/order/${id}`);
+        const token = JSON.parse(localStorage.getItem('user-info'));
+        await axios.delete(`/v1/order/${id}`,{ headers: {"Authorization" : `Bearer ${token}`} });
         loadOrders();
     }
 
@@ -33,7 +31,7 @@ const Order = () => {
             <div className="py-4">
                 <div className="d-flex justify-content-between">
                     <h1>Orders</h1>
-                    <Link className="btn btn-outline-primary" to="order/create">
+                    <Link className="btn btn-outline-primary" to="/order/create">
                         <span className="add-order-button-text">Add order</span>
                     </Link>
                 </div>
@@ -60,7 +58,7 @@ const Order = () => {
                                     </td>
                                     <td>
                                         <Link className="btn btn-primary mr-2 action" to={`order/detail/${order.id}`}>Details</Link>
-                                        <Link className="btn btn-outline-primary mr-2 action" to={`order/edit/${order.id}`}>Edit</Link>
+                                        <Link className="btn btn-outline-primary mr-2 action" to={`/order/edit/${order.id}`}>Edit</Link>
                                         <Link className="btn btn-danger" to="" onClick={() => deleteOrder(order.id)}>Delete</Link>
                                     </td>
                                 </tr>
