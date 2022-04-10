@@ -14,15 +14,23 @@ const Order = () => {
     //get orders
     const loadOrders = async () => {
         const token = JSON.parse(localStorage.getItem('user-info'));
-        const result = await axios.get("/v1/order/all",{ headers: {"Authorization" : `Bearer ${token}`} });
+        const result = await axios.get("/v1/order/all", { headers: { "Authorization": `Bearer ${token}` } });
         setOrder(result.data);
-        
+
     }
+
+    const DRAFT = 0;
 
     //delete order
     const deleteOrder = async id => {
         const token = JSON.parse(localStorage.getItem('user-info'));
-        await axios.delete(`/v1/order/${id}`,{ headers: {"Authorization" : `Bearer ${token}`} });
+        await axios.delete(`/v1/order/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+        loadOrders();
+    }
+
+    const submitOrder = async id => {
+        const token = JSON.parse(localStorage.getItem('user-info'));
+        await axios.get(`/v1/order/submit/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
         loadOrders();
     }
 
@@ -43,6 +51,7 @@ const Order = () => {
                             <th scope="col">No</th>
                             <th scope="col">Total price</th>
                             <th scope="col">Date</th>
+                            <th scope="col">Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -56,10 +65,18 @@ const Order = () => {
                                     <td>
                                         <Moment format="YYYY/MM/DD">{order.orderDate}</Moment>
                                     </td>
+                                    <td className={order.status == DRAFT ? "text-danger" : "text-success"}>{order.status == DRAFT ? "DRAFT" : "SUBMITTED"}</td>
                                     <td>
                                         <Link className="btn btn-primary mr-2 action" to={`order/detail/${order.id}`}>Details</Link>
                                         <Link className="btn btn-outline-primary mr-2 action" to={`/order/edit/${order.id}`}>Edit</Link>
                                         <Link className="btn btn-danger" to="" onClick={() => deleteOrder(order.id)}>Delete</Link>
+                                        {(() => {
+                                            if (order.status == DRAFT) {
+                                                return (
+                                                    <Link className="btn btn-outline-success submit-btn" to="" onClick={() => submitOrder(order.id)}>Submit</Link>
+                                                )
+                                            }
+                                        })()}
                                     </td>
                                 </tr>
                             ))
